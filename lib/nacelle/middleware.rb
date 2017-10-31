@@ -1,5 +1,5 @@
-module OutputFilter
-  class Cells
+module Nacelle
+  class Middleware
     def initialize app
       @app = app
     end

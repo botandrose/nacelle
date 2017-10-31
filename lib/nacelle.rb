@@ -1,13 +1,13 @@
-require "nacelle/version"
 require "rails/all"
 require "cells"
-require "cells_ext"
-require "output_filter/cells"
+require "nacelle/version"
+require "nacelle/middleware"
+require "nacelle/cells_ext"
 
 module Nacelle
   class Engine < ::Rails::Engine
     initializer "nacelle.init" do |app|
-      app.config.middleware.use OutputFilter::Cells
+      app.config.middleware.use Nacelle::Middleware
     end
   end
 end

@@ -4,7 +4,7 @@ require "nacelle"
 
 class TestApp < Rails::Application
   config.secret_key_base = "test"
-  config.middleware.use OutputFilter::Cells
+  config.middleware.use Nacelle::Middleware
 end
 
 Rails.logger = Logger.new("/dev/null")
