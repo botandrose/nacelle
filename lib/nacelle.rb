@@ -1,8 +1,7 @@
-require "rails/all"
-require "cells"
 require "nacelle/version"
+require "action_controller/railtie"
+require "nacelle/cell"
 require "nacelle/middleware"
-require "nacelle/cells_ext"
 
 module Nacelle
   class Engine < ::Rails::Engine

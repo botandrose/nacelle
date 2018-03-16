@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  namespace :admin do
-    get "cells" => "cells#index"
+  namespace :nacelle do
+    resources :cells, only: :index
   end
 end
 

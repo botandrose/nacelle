@@ -1,8 +1,13 @@
 # Nacelle
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/nacelle`. To experiment with that code, run `bin/console` for an interactive prompt.
+Rails engine for inserting magic blocks into CMS content via cells.
 
-TODO: Delete this and the text above, and describe your gem
+In your CMS content:
+```html
+<cell name="my_account/form" />
+```
+
+The Nacelle middleware will replace this with the result of MyAccountCell#form.
 
 ## Installation
 
@@ -12,17 +17,19 @@ Add this line to your application's Gemfile:
 gem 'nacelle'
 ```
 
-And then execute:
+# Optional CKEditor integration
 
-    $ bundle
+Cells you want to show up in the cell selection menu must inherit from Nacelle::Cell.
 
-Or install it yourself as:
+```javascript
+// ckeditor/config.js
 
-    $ gem install nacelle
+//= require nacelle/ckeditor
+...
+config.extraPlugins = 'cells';
 
-## Usage
-
-TODO: Write usage instructions here
+// finally, add 'InsertCell' to your toolbar config
+```
 
 ## Development
 
@@ -32,7 +39,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/nacelle/fork )
+1. Fork it ( https://github.com/botandrose/nacelle/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)

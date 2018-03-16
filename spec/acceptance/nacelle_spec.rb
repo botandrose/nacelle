@@ -4,18 +4,25 @@ require "nacelle"
 
 class TestApp < Rails::Application
   config.secret_key_base = "test"
-  config.middleware.use Nacelle::Middleware
+  config.eager_load = false
+  config.logger = Logger.new("/dev/stdout")
+
+  initializer "log level" do
+    Rails.logger.level = Logger::WARN
+  end
 end
 
-Rails.logger = Logger.new("/dev/null")
+TestApp.initialize!
 
-class TestController < ActionController::Base
+class ApplicationController < ActionController::Base;end
+
+class TestController < ApplicationController
   def index
     render html: '<cell name="test/test"></cell>'.html_safe
   end
 end
 
-class TestCell < Cell::Base
+class TestCell < Nacelle::Cell
   def test
     "TestCell render!"
   end
@@ -23,6 +30,11 @@ end
 
 TestApp.routes.draw do
   root to: "test#index"
+
+  # FIXME Y U NO LOAD ENGINE ROUTES
+  namespace :nacelle do
+    resources :cells, only: :index
+  end
 end
 
 feature "nacelle" do
@@ -35,4 +47,10 @@ feature "nacelle" do
     expect(page.body).to_not include("<cell")
     expect(page.body).to include("TestCell render!")
   end
+
+  scenario "it publishes list of cells at /nacelle/cells.json" do
+    visit "/nacelle/cells.json"
+    expect(JSON.load(page.body)).to eq({ "cells" => [{ "id" => "test/test", "name" => "Test Test" }] })
+  end
 end
+
