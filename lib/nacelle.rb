@@ -8,5 +8,9 @@ module Nacelle
     initializer "nacelle.init" do |app|
       app.config.middleware.use Nacelle::Middleware
     end
+
+    config.assets.precompile += %w( 
+      ckeditor/plugins/cells/icons/*
+    )
   end
 end
