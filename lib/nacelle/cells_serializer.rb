@@ -14,6 +14,7 @@ class Nacelle::CellsSerializer
       {
         id:   "#{cell}/#{action}",
         name: "#{cell_name} #{action_name}",
+        form: settings_html_for(cell, action),
       }
     end
   end
@@ -29,5 +30,11 @@ class Nacelle::CellsSerializer
     # TODO pull in cells from engines, too
     cell_files = Dir[::Rails.root.join('app/cells/*.rb')]
     cell_files.each(&method(:require))
+  end
+
+  def settings_html_for cell, action
+    path = ::Rails.root.join("app/cells/#{cell}/#{action}_form.html.erb")
+    ERB.new(File.read(path)).result
+  rescue Errno::ENOENT
   end
 end
