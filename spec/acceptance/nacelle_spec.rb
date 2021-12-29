@@ -24,8 +24,9 @@ class TestController < ApplicationController
 end
 
 class TestCell < Nacelle::Cell
+  prepend_view_path "spec/views"
   def test
-    "TestCell render!"
+    render
   end
 end
 
