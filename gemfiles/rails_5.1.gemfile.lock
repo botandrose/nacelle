@@ -4,6 +4,7 @@ PATH
     nacelle (0.2.2)
       cells (~> 3.0)
       rails
+      sprockets-rails
 
 GEM
   remote: https://rubygems.org/
@@ -161,4 +162,4 @@ DEPENDENCIES
   sprockets (~> 3.0)
 
 BUNDLED WITH
-   1.17.3
+   2.2.32
