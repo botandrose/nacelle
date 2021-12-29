@@ -1,5 +1,6 @@
 require "nacelle/version"
 require "action_controller/railtie"
+require "sprockets/railtie"
 require "nacelle/cell"
 require "nacelle/middleware"
 
