@@ -1,5 +1,7 @@
 # Nacelle
 
+[![CI Status](https://github.com/botandrose/nacelle/workflows/CI/badge.svg?branch=master)](https://github.com/botandrose/nacelle/actions?query=workflow%3ACI+branch%3Amaster)
+
 Rails engine for inserting magic blocks into CMS content via cells.
 
 In your CMS content:
