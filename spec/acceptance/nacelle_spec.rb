@@ -6,6 +6,7 @@ class TestApp < Rails::Application
   config.secret_key_base = "test"
   config.eager_load = false
   config.logger = Logger.new("/dev/stdout")
+  config.hosts = nil
 
   initializer "log level" do
     Rails.logger.level = Logger::WARN
