@@ -1,3 +1,6 @@
+require "active_support/xml_mini/nokogiri"
+ActiveSupport::XmlMini.backend = "Nokogiri"
+
 require "active_support/core_ext/hash"
 
 module Nacelle
