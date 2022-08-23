@@ -2,6 +2,7 @@ require "cells"
 
 module Nacelle
   class Cell < Cell::Base
+    self.view_paths += %w[app/cells app/views]
   end
 end
 
