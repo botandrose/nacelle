@@ -15,20 +15,20 @@ module Nacelle
 
       new_body = ""
       body.each { |part| new_body << part }
-      process! new_body
+      process! new_body, env
       headers["Content-Length"] = new_body.length.to_s
       [status, headers, [new_body]]
     end
 
     private
 
-    def process! body
+    def process! body, env
       cells = cells body
 
       body.gsub!(/(#{cells.keys.join('|')})/) do |tag|
         name, state, attrs = cells[tag]
         attrs = HashWithIndifferentAccess.new(attrs)
-        cell = "#{name.camelize}Cell".constantize.new
+        cell = "#{name.camelize}Cell".constantize.new_with_request(Rack::Request.new(env))
         args = [state]
         attrs.delete "class" # ignore styling class
         args << attrs unless attrs.empty?
