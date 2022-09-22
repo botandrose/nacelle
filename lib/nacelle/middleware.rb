@@ -16,7 +16,7 @@ module Nacelle
       new_body = ""
       body.each { |part| new_body << part }
       process! new_body, env
-      headers["Content-Length"] = new_body.length.to_s
+      headers.delete("Content-Length")
       [status, headers, [new_body]]
     end
 
