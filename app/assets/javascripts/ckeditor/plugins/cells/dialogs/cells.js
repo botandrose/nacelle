@@ -78,6 +78,14 @@ CKEDITOR.dialog.add("cellDialog", function(editor) {
         } else {
           return values[0]
         }
+        break;
+      case 'select-multiple':
+        return Array.from(element.options)
+          .filter(o => o.selected)
+          .map(o => o.value)
+          .join(",")
+        break;
+
       default:
         return element.value
     }
@@ -105,10 +113,14 @@ CKEDITOR.dialog.add("cellDialog", function(editor) {
         break;
 
       case 'select-multiple':
-        var values = value.constructor === Array ? value : [value];
-        for(var k = 0; k < element.options.length; k++) {
-          element.options[k].selected = (values.indexOf(element.options[k].value) > -1 );
-        }
+        var values = value.toString().split(",");
+        Array.from(element.options).forEach(option => {
+          if(values.includes(option.value)) {
+            option.setAttribute("selected", "selected")
+          } else {
+            option.removeAttribute("selected")
+          }
+        })
         break;
 
       case 'select':
