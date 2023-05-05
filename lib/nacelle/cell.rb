@@ -8,6 +8,14 @@ module Nacelle
       new.tap { |cell| cell.instance_variable_set :@request, request }
     end
 
+    def self.updated_at
+      nil # can be overriden to bust caches
+    end
+
+    def self.cache_key
+      nil # can be overriden to bust caches
+    end
+
     private def request
       @request
     end

@@ -1,7 +1,7 @@
 module Nacelle
   class AfterFilter < Struct.new(:controller)
     def self.after controller
-      if controller.content_type.include?("text/html")
+      if controller.content_type&.include?("text/html")
         new(controller).call
       end
     end
