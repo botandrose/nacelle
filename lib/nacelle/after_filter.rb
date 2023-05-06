@@ -1,3 +1,8 @@
+require "active_support/xml_mini/nokogiri"
+ActiveSupport::XmlMini.backend = "Nokogiri"
+require "active_support/core_ext/hash"
+# we need all this for Hash.from_xml
+
 module Nacelle
   class AfterFilter < Struct.new(:controller)
     def self.after controller
