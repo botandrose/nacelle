@@ -4,8 +4,12 @@ module Nacelle
   class Cell < Cell::Base
     self.view_paths += %w[app/cells app/views]
 
-    def self.new_with_request request
-      new.tap { |cell| cell.instance_variable_set :@request, request }
+    def self.new_with_controller controller
+      new.tap do |cell|
+        cell.instance_variable_set :@request, controller.request
+        cell.instance_variable_set :@session, controller.session
+        cell.instance_variable_set :@cookies, controller.send(:cookies)
+      end
     end
 
     def self.updated_at
@@ -16,9 +20,7 @@ module Nacelle
       to_s # can be overriden to bust caches
     end
 
-    private def request
-      @request
-    end
+    attr_accessor :request, :session, :cookies
   end
 end
 

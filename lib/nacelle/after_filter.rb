@@ -17,7 +17,7 @@ module Nacelle
       controller.response.body.gsub!(/(#{cells.keys.join('|')})/) do |tag|
         name, state, attrs = cells[tag]
         attrs = HashWithIndifferentAccess.new(attrs)
-        cell = "#{name.camelize}Cell".constantize.new_with_request(controller.request)
+        cell = "#{name.camelize}Cell".constantize.new_with_controller(controller)
         args = [state]
         attrs.delete "class" # ignore styling class
         args << attrs unless attrs.empty?
