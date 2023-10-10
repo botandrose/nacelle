@@ -21,9 +21,20 @@ module Nacelle
       to_s # can be overriden to bust caches
     end
 
-    attr_accessor :request, :session, :cookies
+    attr_reader :request, :session, :cookies
 
     delegate :perform_caching, :read_fragment, :write_fragment, to: :@controller
+
+    def self.action_methods
+      super - %w[
+        cookies
+        request
+        session
+        read_fragment
+        write_fragment
+        perform_caching
+      ]
+    end
   end
 end
 
