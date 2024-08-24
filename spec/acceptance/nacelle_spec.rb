@@ -19,13 +19,19 @@ class ApplicationController < ActionController::Base;end
 
 class TestController < ApplicationController
   def index
-    render html: '<cell name="test/test"></cell>'.html_safe
+    cell = params[:cell] || "test/test"
+    render html: %(<cell name="#{cell}"></cell>).html_safe
   end
 end
 
 class TestCell < Nacelle::Cell
-  prepend_view_path "spec/views"
-  def test
+  self.view_path = "spec/views"
+
+  def test options={}
+    render
+  end
+
+  def with_path_helpers options={}
     render
   end
 end
@@ -50,9 +56,18 @@ feature "nacelle" do
     expect(page.body).to include("TestCell render!")
   end
 
+  scenario "cells can use path helpers" do
+    visit "/?cell=test/with_path_helpers"
+    expect(page.body).to_not include("<cell")
+    expect(page.body).to eq("/nacelle/cells\n")
+  end
+
   scenario "it publishes list of cells at /nacelle/cells.json" do
     visit "/nacelle/cells.json"
-    expect(JSON.load(page.body)).to eq({ "cells" => [{ "id" => "test/test", "name" => "Test Test", "form" => nil }] })
+    expect(JSON.load(page.body)).to eq({ "cells" => [
+      { "id" => "test/with_path_helpers", "name" => "Test With path helpers", "form" => nil },
+      { "id" => "test/test", "name" => "Test Test", "form" => nil },
+    ] })
   end
 end
 

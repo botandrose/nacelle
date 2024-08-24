@@ -1,9 +1,5 @@
-require "cells"
-
 module Nacelle
-  class Cell < Cell::Base
-    self.view_paths += %w[app/cells app/views]
-
+  class Cell
     def self.new_with_controller controller
       new.tap do |cell|
         cell.instance_variable_set :@controller, controller
@@ -26,26 +22,32 @@ module Nacelle
     delegate :perform_caching, :read_fragment, :write_fragment, to: :@controller
 
     def self.action_methods
-      super - %w[
-        cookies
-        request
-        session
-        read_fragment
-        write_fragment
-        perform_caching
-      ]
+      instance_methods - Class.new(superclass).instance_methods
+    end
+
+    def self.name
+      to_s.underscore.sub("_cell","")
+    end
+
+    cattr_accessor(:view_path) { "app/cells" }
+    attr_accessor :action
+
+    def self.helper mod
+    end
+
+    def render template: nil
+      template ||= "#{self.class.name}/#{action}"
+      assigns = instance_variables.reduce({}) do |hash, key|
+        new_key = key.to_s.split("@").last.to_sym
+        value = instance_variable_get(key)
+        hash.merge(new_key => value)
+      end
+      view_context = @controller.view_context.dup
+      paths = view_context.lookup_context.view_paths + [view_path]
+      view_context.lookup_context.view_paths.instance_variable_set :@paths, paths
+      view_context.assign assigns
+      view_context.render template: template
     end
   end
 end
 
-if Rails.version >= "6.1.0"
-  Cell::Base::View.class_eval do
-    def compiled_method_container
-      ActionView::Base
-    end
-
-    def view_cache_dependencies
-      []
-    end
-  end
-end

@@ -28,5 +28,4 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "rails"
   spec.add_dependency "sprockets-rails"
-  spec.add_dependency "cells", "~>3.0"
 end

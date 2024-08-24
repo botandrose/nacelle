@@ -15,16 +15,16 @@ module Nacelle
       cells = cells controller.response.body
 
       controller.response.body.gsub!(/(#{cells.keys.join('|')})/) do |tag|
-        name, state, attrs = cells[tag]
+        name, action, attrs = cells[tag]
+        action = action.to_sym
         attrs = HashWithIndifferentAccess.new(attrs)
         cell = "#{name.camelize}Cell".constantize.new_with_controller(controller)
-        args = [state]
         attrs.delete "class" # ignore styling class
-        args << attrs unless attrs.empty?
-        begin
-          cell.render_state *args
-        rescue AbstractController::ActionNotFound
-          "<strong>Cell “#{name.capitalize} #{state}” not found!</strong>"
+        if cell.class.action_methods.include?(action)
+          cell.action = action
+          cell.send(action, attrs)
+        else
+          "<strong>Cell “#{name.capitalize} #{action}” not found!</strong>"
         end
       end unless cells.empty?
     end
