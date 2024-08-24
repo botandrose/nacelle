@@ -9,7 +9,7 @@ class Nacelle::CellsSerializer
     cell = klass.to_s.sub("Cell", "").underscore
     cell_name = cell.humanize
 
-    klass.action_methods.map do |action|
+    klass.action_methods.sort.map do |action|
       action_name = action.to_s.humanize
       {
         id:   "#{cell}/#{action}",

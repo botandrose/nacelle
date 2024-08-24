@@ -65,8 +65,8 @@ feature "nacelle" do
   scenario "it publishes list of cells at /nacelle/cells.json" do
     visit "/nacelle/cells.json"
     expect(JSON.load(page.body)).to eq({ "cells" => [
-      { "id" => "test/with_path_helpers", "name" => "Test With path helpers", "form" => nil },
       { "id" => "test/test", "name" => "Test Test", "form" => nil },
+      { "id" => "test/with_path_helpers", "name" => "Test With path helpers", "form" => nil },
     ] })
   end
 end
