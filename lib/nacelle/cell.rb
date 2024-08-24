@@ -44,7 +44,7 @@ module Nacelle
       end
       view_context = @controller.view_context.dup
       paths = view_context.lookup_context.view_paths + [view_path]
-      view_context.lookup_context.view_paths.instance_variable_set :@paths, paths
+      view_context.lookup_context.instance_variable_set :@view_paths, paths
       view_context.assign assigns
       view_context.render template: template
     end
