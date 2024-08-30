@@ -32,7 +32,14 @@ module Nacelle
     cattr_accessor(:view_path) { "app/cells" }
     attr_accessor :action
 
+    class_attribute :helpers, default: []
     def self.helper mod
+      helpers << mod
+    end
+
+    class_attribute :helper_methods, default: []
+    def self.helper_method meth
+      helper_methods << meth
     end
 
     def render template: nil
@@ -46,6 +53,14 @@ module Nacelle
       paths = view_context.lookup_context.view_paths + [view_path]
       view_context.lookup_context.instance_variable_set :@view_paths, paths
       view_context.assign assigns
+      cell = self
+
+      helper_methods.each do |meth|
+        view_context.compiled_method_container.define_method meth do
+          cell.send(meth)
+        end
+      end
+
       view_context.render template: template
     end
   end
