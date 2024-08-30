@@ -22,7 +22,11 @@ module Nacelle
         attrs.delete "class" # ignore styling class
         if cell.class.action_methods.include?(action)
           cell.action = action
-          cell.send(action, attrs)
+          if cell.method(action).arity.zero? && attrs.empty?
+            cell.send(action)
+          else
+            cell.send(action, attrs)
+          end
         else
           "<strong>Cell “#{name.capitalize} #{action}” not found!</strong>"
         end
