@@ -13,8 +13,9 @@ module Nacelle
 
     def call
       cells = cells controller.response.body
+      return if cells.empty?
 
-      controller.response.body.gsub!(/(#{cells.keys.join('|')})/) do |tag|
+      controller.response.body = controller.response.body.gsub(/(#{cells.keys.join('|')})/) do |tag|
         name, action, attrs = cells[tag]
         action = action.to_sym
         attrs = HashWithIndifferentAccess.new(attrs)
@@ -30,7 +31,7 @@ module Nacelle
         else
           "<strong>Cell “#{name.capitalize} #{action}” not found!</strong>"
         end
-      end unless cells.empty?
+      end
     end
 
     private
