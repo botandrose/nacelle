@@ -56,7 +56,7 @@ module Nacelle
       cell = self
 
       helper_methods.each do |meth|
-        view_context.compiled_method_container.define_method meth do
+        view_context.define_singleton_method meth do
           cell.send(meth)
         end
       end
