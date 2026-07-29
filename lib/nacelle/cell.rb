@@ -14,7 +14,7 @@ module Nacelle
     end
 
     def self.cache_key
-      to_s # can be overriden to bust caches
+      "#{self}/#{updated_at.to_i}"
     end
 
     attr_reader :request, :session, :cookies
