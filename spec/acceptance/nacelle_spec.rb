@@ -115,6 +115,24 @@ feature "nacelle" do
     expect(page.body).to eq("isolated")
   end
 
+  scenario "an unknown action on a known cell renders a not found message" do
+    visit "/?cell=test/missing"
+    expect(page.status_code).to eq(200)
+    expect(page.body).to include("<strong>Cell “Test missing” not found!</strong>")
+  end
+
+  scenario "an unknown cell renders a not found message" do
+    visit "/?cell=missing/cell"
+    expect(page.status_code).to eq(200)
+    expect(page.body).to include("<strong>Cell “Missing cell” not found!</strong>")
+  end
+
+  scenario "a cell name without an action renders a not found message" do
+    visit "/?cell=test"
+    expect(page.status_code).to eq(200)
+    expect(page.body).to include("<strong>Cell “Test” not found!</strong>")
+  end
+
   scenario "it publishes list of cells at /nacelle/cells.json" do
     visit "/nacelle/cells.json"
     expect(JSON.load(page.body)).to eq({ "cells" => [

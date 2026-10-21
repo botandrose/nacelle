@@ -17,11 +17,12 @@ module Nacelle
 
       controller.response.body = controller.response.body.gsub(/(#{cells.keys.join('|')})/) do |tag|
         name, action, attrs = cells[tag]
-        action = action.to_sym
+        action = action&.to_sym
         attrs = HashWithIndifferentAccess.new(attrs)
-        cell = "#{name.camelize}Cell".constantize.new_with_controller(controller)
+        cell_class = "#{name.camelize}Cell".safe_constantize
         attrs.delete "class" # ignore styling class
-        if cell.class.action_methods.include?(action)
+        if cell_class&.action_methods&.include?(action)
+          cell = cell_class.new_with_controller(controller)
           cell.action = action
           if cell.method(action).arity.zero? && attrs.empty?
             cell.send(action)
@@ -29,7 +30,7 @@ module Nacelle
             cell.send(action, attrs)
           end
         else
-          "<strong>Cell “#{name.capitalize} #{action}” not found!</strong>"
+          "<strong>Cell “#{[name.capitalize, action].compact.join(" ")}” not found!</strong>"
         end
       end
     end
