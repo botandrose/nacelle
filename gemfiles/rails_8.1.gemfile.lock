@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    nacelle (0.7.1)
+    nacelle (0.7.2)
       rails
       sprockets-rails
 
