@@ -27,6 +27,10 @@ class TestController < ApplicationController
     render html: %(<cell name="test/with_greeting"></cell> <cell name="other/with_greeting"></cell>).html_safe
   end
 
+  def regex_metacharacters
+    render html: '<cell name="test/test" note="a)|b"></cell>'.html_safe
+  end
+
   def leak_test
     cell = TestCell.new_with_controller(self)
     cell.action = :with_greeting
@@ -80,6 +84,7 @@ TestApp.routes.draw do
   root to: "test#index"
   get "two_cells", to: "test#two_cells"
   get "leak_test", to: "test#leak_test"
+  get "regex_metacharacters", to: "test#regex_metacharacters"
 
   # FIXME Y U NO LOAD ENGINE ROUTES
   namespace :nacelle do
@@ -102,6 +107,13 @@ feature "nacelle" do
     visit "/?cell=test/with_path_helpers"
     expect(page.body).to_not include("<cell")
     expect(page.body).to eq("/nacelle/cells\n")
+  end
+
+  scenario "cell attributes containing regex metacharacters are matched literally" do
+    visit "/regex_metacharacters"
+    expect(page.status_code).to eq(200)
+    expect(page.body).to_not include("<cell")
+    expect(page.body).to include("TestCell render!")
   end
 
   scenario "helper methods are scoped to their cell instance, not shared across cells" do

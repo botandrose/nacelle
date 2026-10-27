@@ -15,7 +15,7 @@ module Nacelle
       cells = cells controller.response.body
       return if cells.empty?
 
-      controller.response.body = controller.response.body.gsub(/(#{cells.keys.join('|')})/) do |tag|
+      controller.response.body = controller.response.body.gsub(Regexp.union(cells.keys)) do |tag|
         name, action, attrs = cells[tag]
         action = action&.to_sym
         attrs = HashWithIndifferentAccess.new(attrs)
